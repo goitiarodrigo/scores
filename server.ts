@@ -2,6 +2,7 @@ import {Request, Response} from 'express'
 import express from 'express'
 import * as path from 'path'
 import cors from 'cors'
+import router from './routes/index'
 require('dotenv').config()
 require('./config/database')
 const app = express()
@@ -10,6 +11,8 @@ import morgan from 'morgan'
 app.use(cors())
 app.use(express.json())
 app.use(morgan('dev'))
+
+app.use('/api', router)
 
 if (process.env.NODE_ENV === 'production') {
     app.use(express.static('client/build'))
