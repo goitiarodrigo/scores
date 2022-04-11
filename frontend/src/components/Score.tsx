@@ -1,7 +1,7 @@
 import "../App.css"
 
 
-const Score = () => {
+const Score = ({allPlayers}: any) => {
   return (
     <div className="score-container">
       <div className="header">

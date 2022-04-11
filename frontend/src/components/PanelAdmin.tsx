@@ -1,4 +1,5 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
+import axios from 'axios'
 
 interface IPLayer {
     name: string,
@@ -6,7 +7,7 @@ interface IPLayer {
     image: string,
 }
 
-const PanelAdmin = () => {
+const PanelAdmin = ({allPlayers}: any) => {
     const [player, setPlayer] = useState<IPLayer>({
         name: '',
         tag: '',
@@ -16,11 +17,12 @@ const PanelAdmin = () => {
     const [choosePlayer, setChoosePlayer] = useState({name: 'Elegí un jugador'})
     const [chooseAction, setChooseAction] = useState({newPlayer: false, uploadInfo: false})
     const [stats, setStats] = useState({adr: 0, kdr: 0, score: 0, total: 1})
+   
 
-
-    const handleNewPlayer = () => {
+    const handleNewPlayer = async () => {
         setChooseAction({uploadInfo: false, newPlayer: true})
         setChoosePlayer({name: 'Elegí un jugador'})
+        const newUser = await axios.post(`https://puntos-wilmar.herokuapp.com/api/user/new-user`, player)
     }
 
     const handleChoosePlayer = (e: any) => {
@@ -29,11 +31,10 @@ const PanelAdmin = () => {
         setChooseAction({uploadInfo: true, newPlayer: false})
     }
 
-    const handleSubmit = () => {
+    const handleSubmit = async () => {
         const { adr, kdr, score, total } = stats
         const subtotal = (adr >= 100 && kdr >= 0.90) ? 0.5 : (adr >= 100 && kdr >= 1.1) ? 1 : 0
-        
-
+        const uploadStat = await axios.post(`https://puntos-wilmar.herokuapp.com/api/user/new-stat/${'id'}`, stats)
     }
 
     return (
@@ -43,11 +44,9 @@ const PanelAdmin = () => {
                 <div className="player-profile">
                     <label>Jugador </label>
                     <select onChange={handleChoosePlayer}>
-                        <option>Nombre</option>
-                        <option>Nombre</option>
-                        <option>Nombre</option>
-                        <option>Nombre</option>
-                        <option>Nombre</option>
+                        {allPlayers.map((element: any, index: number) => {
+                            return <option>{element}</option>
+                        })}
                     </select>
 
                     <p>{choosePlayer.name}</p>

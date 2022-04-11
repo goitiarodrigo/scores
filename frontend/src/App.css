@@ -26,6 +26,28 @@ div.tittle-container {
   background-color: rgba(245, 245, 245, 0.483);
 }
 
+div.tittle-button {
+  display: flex;
+}
+
+div.tittle-button button {
+  margin-left: 2rem;
+  padding: 0.5rem;
+  border-radius: 5px;
+  font-size: 1rem;
+  font-weight: bold;
+  border: none;
+  cursor: pointer;
+  transition: 500ms;
+  color: #A68358;
+  align-self: center;
+}
+
+div.tittle-button button:hover {
+  background-color: #167d8e;
+  color: white;
+}
+
 div.punctuation {
   margin-top: 3.5rem;
   
@@ -212,4 +234,53 @@ div.scoreTotal-container button {
   border-radius: 10px;
   align-self: center;
   height: 2rem;
+}
+
+
+
+div.modal-login {
+  width: 25rem;
+  height: 20rem;
+  box-shadow: 12px 0 100vw 55vw rgb(68 67 67 / 82%);
+  display: flex;
+  flex-direction: column;
+  background-color: rgb(48 106 154);
+  justify-content: space-around;
+  align-items: center;
+  color: #fff;
+  padding: 1rem;
+  bottom: 16rem;
+  position: absolute;
+}
+
+input.input {
+  outline: none;
+  width: 100%;
+  background-color: transparent;
+  margin: 1.5rem 0;
+  color: #fff!important;
+  border: none;
+  border-bottom: 1px solid #fff;
+  font-size: 1.5rem;
+}
+
+div.svg-container {
+  position: relative;
+  left: 11rem;
+  cursor: pointer;
+  bottom: 1rem;
+}
+
+button.buttonLog {
+  border: none;
+  border-radius: 2em;
+  outline: none;
+  display: inline-block;
+  cursor: pointer;
+  color: #7e7e7e;
+  font-size: 1rem;
+  padding: 0.5rem 1rem;
+  width: 8rem;
+  text-decoration: none;
+  z-index: 3;
 }

@@ -1,4 +1,4 @@
-import User from '../models/user'
+import User from '../models/User'
 import { Request, Response } from 'express'
 
 export const userController = {
@@ -21,7 +21,7 @@ export const userController = {
     },
 
     newStat: async (req: Request, res: Response) => {
-        const {adr, kdr, score, total} = req.body
+        const {adr, kdr, score, total} = req.body.stats
         const { id } = req.params
 
         const userUpdated = await User.findByIdAndUpdate({_id: id}, {$push: {adr, kdr, score, total}}, {new: true})
