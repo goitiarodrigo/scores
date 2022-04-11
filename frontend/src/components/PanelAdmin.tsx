@@ -4,25 +4,28 @@ import axios from 'axios'
 interface IPLayer {
     name: string,
     tag: string,
-    image: string,
+    urlImage: string,
 }
 
 const PanelAdmin = ({allPlayers}: any) => {
     const [player, setPlayer] = useState<IPLayer>({
         name: '',
         tag: '',
-        image: '',
+        urlImage: '',
     })
+
+    const URL = 'http://localhost:4000/api/'
 
     const [choosePlayer, setChoosePlayer] = useState({name: 'Elegí un jugador'})
     const [chooseAction, setChooseAction] = useState({newPlayer: false, uploadInfo: false})
-    const [stats, setStats] = useState({adr: 0, kdr: 0, score: 0, total: 1})
+    const [stats, setStats] = useState({adr: 0, kdr: 0, score: 0, total: 0})
    
 
     const handleNewPlayer = async () => {
+        console.log(player)
         setChooseAction({uploadInfo: false, newPlayer: true})
         setChoosePlayer({name: 'Elegí un jugador'})
-        const newUser = await axios.post(`https://puntos-wilmar.herokuapp.com/api/user/new-user`, player)
+        const newUser = await axios.post(`${URL}user/new-user`, player)
     }
 
     const handleChoosePlayer = (e: any) => {
@@ -34,7 +37,8 @@ const PanelAdmin = ({allPlayers}: any) => {
     const handleSubmit = async () => {
         const { adr, kdr, score, total } = stats
         const subtotal = (adr >= 100 && kdr >= 0.90) ? 0.5 : (adr >= 100 && kdr >= 1.1) ? 1 : 0
-        const uploadStat = await axios.post(`https://puntos-wilmar.herokuapp.com/api/user/new-stat/${'id'}`, stats)
+        const uploadStat = await axios.post(`${URL}user/new-stat/${'id'}`, {totalScore: subtotal + score})
+        console.log(uploadStat)
     }
 
     return (
@@ -44,8 +48,9 @@ const PanelAdmin = ({allPlayers}: any) => {
                 <div className="player-profile">
                     <label>Jugador </label>
                     <select onChange={handleChoosePlayer}>
+                        <option>Seleccioná un jugador</option>
                         {allPlayers.map((element: any, index: number) => {
-                            return <option>{element}</option>
+                            return <option>{element.name}</option>
                         })}
                     </select>
 
@@ -55,149 +60,25 @@ const PanelAdmin = ({allPlayers}: any) => {
 
             <div className="players-container">
                 <div className="players">
-                    <div className="row-player">
-                        <div className="ranking">
-                            <span>1</span>
-                        </div>
-                        <div className="userProfile">
-                            <div className='photoProfile' style={{backgroundImage: 'url("https://files.antena2.com/antena2/public/2018-07/wilmar_barrios_boca_juniors_0_1_0.jpg")'}}></div>
-                            <div>
-                                <h3>Killermeister</h3>
-                                <p>Rodrigo Goitia</p>
+                    {allPlayers.map((player: any, index: number) => {
+                        return (
+                            <div key={index} className="row-player">
+                                <div className="ranking">
+                                    <span>1</span>
+                                </div>
+                                <div className="userProfile">
+                                    <div className='photoProfile' style={{backgroundImage: `url(${player.urlImage})`}}></div>
+                                    <div>
+                                        <h3>{player.tag}</h3>
+                                        <p>{player.name}</p>
+                                    </div>
+                                </div>
+                                <div className="score">
+                                    <span>57</span>
+                                </div>
                             </div>
-                        </div>
-                        <div className="score">
-                            <span>57</span>
-                        </div>
-                    </div>
-
-                    <div className="row-player">
-                        <div className="ranking">
-                            <span>1</span>
-                        </div>
-                        <div className="userProfile">
-                            <div className='photoProfile' style={{backgroundImage: 'url("https://files.antena2.com/antena2/public/2018-07/wilmar_barrios_boca_juniors_0_1_0.jpg")'}}></div>
-                            <div>
-                                <h3>Killermeister</h3>
-                                <p>Rodrigo Goitia</p>
-                            </div>
-                        </div>
-                        <div className="score">
-                            <span>57</span>
-                        </div>
-                    </div>
-
-                    <div className="row-player">
-                        <div className="ranking">
-                            <span>1</span>
-                        </div>
-                        <div className="userProfile">
-                            <div className='photoProfile' style={{backgroundImage: 'url("https://files.antena2.com/antena2/public/2018-07/wilmar_barrios_boca_juniors_0_1_0.jpg")'}}></div>
-                            <div>
-                                <h3>Killermeister</h3>
-                                <p>Rodrigo Goitia</p>
-                            </div>
-                        </div>
-                        <div className="score">
-                            <span>57</span>
-                        </div>
-                    </div>
-
-                    <div className="row-player">
-                        <div className="ranking">
-                            <span>1</span>
-                        </div>
-                        <div className="userProfile">
-                            <div className='photoProfile' style={{backgroundImage: 'url("https://files.antena2.com/antena2/public/2018-07/wilmar_barrios_boca_juniors_0_1_0.jpg")'}}></div>
-                            <div>
-                                <h3>Killermeister</h3>
-                                <p>Rodrigo Goitia</p>
-                            </div>
-                        </div>
-                        <div className="score">
-                            <span>57</span>
-                        </div>
-                    </div>
-
-                    <div className="row-player">
-                        <div className="ranking">
-                            <span>1</span>
-                        </div>
-                        <div className="userProfile">
-                            <div className='photoProfile' style={{backgroundImage: 'url("https://files.antena2.com/antena2/public/2018-07/wilmar_barrios_boca_juniors_0_1_0.jpg")'}}></div>
-                            <div>
-                                <h3>Killermeister</h3>
-                                <p>Rodrigo Goitia</p>
-                            </div>
-                        </div>
-                        <div className="score">
-                            <span>57</span>
-                        </div>
-                    </div>
-
-                    <div className="row-player">
-                        <div className="ranking">
-                            <span>1</span>
-                        </div>
-                        <div className="userProfile">
-                            <div className='photoProfile' style={{backgroundImage: 'url("https://files.antena2.com/antena2/public/2018-07/wilmar_barrios_boca_juniors_0_1_0.jpg")'}}></div>
-                            <div>
-                                <h3>Killermeister</h3>
-                                <p>Rodrigo Goitia</p>
-                            </div>
-                        </div>
-                        <div className="score">
-                            <span>57</span>
-                        </div>
-                    </div>
-
-                    <div className="row-player">
-                        <div className="ranking">
-                            <span>1</span>
-                        </div>
-                        <div className="userProfile">
-                            <div className='photoProfile' style={{backgroundImage: 'url("https://files.antena2.com/antena2/public/2018-07/wilmar_barrios_boca_juniors_0_1_0.jpg")'}}></div>
-                            <div>
-                                <h3>Killermeister</h3>
-                                <p>Rodrigo Goitia</p>
-                            </div>
-                        </div>
-                        <div className="score">
-                            <span>57</span>
-                        </div>
-                    </div>
-
-                    <div className="row-player">
-                        <div className="ranking">
-                            <span>1</span>
-                        </div>
-                        <div className="userProfile">
-                            <div className='photoProfile' style={{backgroundImage: 'url("https://files.antena2.com/antena2/public/2018-07/wilmar_barrios_boca_juniors_0_1_0.jpg")'}}></div>
-                            <div>
-                                <h3>Killermeister</h3>
-                                <p>Rodrigo Goitia</p>
-                            </div>
-                        </div>
-                        <div className="score">
-                            <span>57</span>
-                        </div>
-                    </div>
-
-                    <div className="row-player">
-                        <div className="ranking">
-                            <span>1</span>
-                        </div>
-                        <div className="userProfile">
-                            <div className='photoProfile' style={{backgroundImage: 'url("https://files.antena2.com/antena2/public/2018-07/wilmar_barrios_boca_juniors_0_1_0.jpg")'}}></div>
-                            <div>
-                                <h3>Killermeister</h3>
-                                <p>Rodrigo Goitia</p>
-                            </div>
-                        </div>
-                        <div className="score">
-                            <span>57</span>
-                        </div>
-                    </div>
+                        )
+                    })}
                 </div>
 
                 {
@@ -206,9 +87,9 @@ const PanelAdmin = ({allPlayers}: any) => {
                         <div className="form-container">
                             <input autoComplete="off" type='text' name='name' value={player.name} placeholder="Nombre y apellido" onChange={(e)=>setPlayer({...player, [e.target.name]: e.target.value})}/>
                             <input autoComplete="off" type='text' name='tag' value={player.tag} placeholder="Tag" onChange={(e)=>setPlayer({...player, [e.target.name]: e.target.value})}/>
-                            <input autoComplete="off" type='text' name='image' value={player.image} placeholder="Url de imágen" onChange={(e)=>setPlayer({...player, [e.target.name]: e.target.value})}/>
+                            <input autoComplete="off" type='text' name='urlImage' value={player.urlImage} placeholder="Url de imágen" onChange={(e)=>setPlayer({...player, [e.target.name]: e.target.value})}/>
 
-                            <button>Subir nuevo jugador</button>
+                            <button onClick={handleNewPlayer}>Subir nuevo jugador</button>
                         </div>
                     </div>
                     :

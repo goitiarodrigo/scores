@@ -8,6 +8,7 @@ export const userController = {
     },
 
     newUser: (req: Request, res: Response) => {
+        console.log(req.body)
         const { name, tag, urlImage } = req.body
 
         const newUser = new User({
@@ -21,10 +22,10 @@ export const userController = {
     },
 
     newStat: async (req: Request, res: Response) => {
-        const {adr, kdr, score, total} = req.body.stats
+        const {totalScore} = req.body.stats
         const { id } = req.params
 
-        const userUpdated = await User.findByIdAndUpdate({_id: id}, {$push: {adr, kdr, score, total}}, {new: true})
+        const userUpdated = await User.findByIdAndUpdate({_id: id}, {$push: {totalScore}}, {new: true})
         res.json({success: true})
     },
 

@@ -4,9 +4,7 @@ const userSchema = new mongoose.Schema({
     name: {type: String, required: true},
     tag: {type: String, required: true},
     urlImage: {type: String, required: true},
-    kdr: [Number],
-    adr: [Number],
-    score: [Number],
+    totalScore: [{Number}]
 })
 
 const User = mongoose.model('user', userSchema)
