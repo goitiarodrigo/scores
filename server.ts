@@ -1,12 +1,13 @@
-import {Request, Response} from 'express'
-import express from 'express'
-import * as path from 'path'
-import cors from 'cors'
-import router from './routes/index'
-require('dotenv').config()
-require('./config/database')
+import { Request, Response } from "express"
+
+const express = require("express")
+const path = require("path")
+const cors = require("cors")
+require("dotenv").config()
+const router = require("./routes/index.ts")
+require("./config/database")
 const app = express()
-import morgan from 'morgan'
+const morgan = require("morgan")
 
 app.use(cors())
 app.use(express.json())
