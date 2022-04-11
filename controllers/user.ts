@@ -1,7 +1,7 @@
 import User from '../models/User'
 import { Request, Response } from 'express'
 
-const userController = {
+export const userController = {
     getUsers: async (req: Request, res: Response) => {
         const allUsers = await User.find()
         res.json({success: true, response: allUsers})
@@ -37,4 +37,3 @@ const userController = {
     }
 }
 
-module.exports = userController

@@ -1,13 +1,13 @@
 import { Request, Response } from "express"
 
-const express = require("express")
-const path = require("path")
-const cors = require("cors")
+import express from "express"
+import * as path from "path"
+import cors from "cors"
 require("dotenv").config()
-const router = require("./routes/index.ts")
+import router from "./routes/index"
 require("./config/database")
 const app = express()
-const morgan = require("morgan")
+import morgan from "morgan"
 
 app.use(cors())
 app.use(express.json())
