@@ -2,6 +2,7 @@ import axios from 'axios';
 import { useEffect, useState } from 'react';
 import './App.css';
 import ModalLogin from './components/ModalLogin';
+
 import PanelAdmin from './components/PanelAdmin';
 import Score from './components/Score';
 
@@ -9,7 +10,7 @@ const App = () => {
   const [isOpen, setIsOpen] = useState(false)
   const [isLogged, setIsLogged] = useState(false)
   const [allPlayers, setAllPlayers] = useState<any>([])
-  const URL = 'https://puntos-wilmar.herokuapp.com/api/'
+  const URL = 'http://localhost:4000/api/'
   const getUsers = async () => {
       const users = await axios.get(`${URL}user/get-users`)
       setAllPlayers(users.data.response)

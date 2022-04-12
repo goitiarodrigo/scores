@@ -1,5 +1,8 @@
 import { useEffect, useState } from "react"
 import axios from 'axios'
+import moment from 'moment'
+moment.locale('es-mx')
+
 
 interface IPLayer {
     name: string,
@@ -14,7 +17,7 @@ const PanelAdmin = ({allPlayers}: any) => {
         urlImage: '',
     })
 
-    const URL = 'https://puntos-wilmar.herokuapp.com/api/'
+    const URL = 'http://localhost:4000/api/'
 
     const [choosePlayer, setChoosePlayer] = useState({name: 'Elegí un jugador'})
     const [chooseAction, setChooseAction] = useState({newPlayer: false, uploadInfo: false})
@@ -23,24 +26,22 @@ const PanelAdmin = ({allPlayers}: any) => {
    
 
     const handleNewPlayer = async () => {
-        console.log(player)
-        const requestOption: any = {
-            body: JSON.stringify(player),
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json',
-                
-            },
-
-        }
         setChooseAction({uploadInfo: false, newPlayer: true})
         setChoosePlayer({name: 'Elegí un jugador'})
         const response = await axios.put(`${URL}user/new-user`, player)
-        
+            if (response.data.success) setPlayer({
+                name: '',
+                tag: '',
+                urlImage: '',
+            })
     }
 
+    console.log(moment(new Date(Date.now())).format('dddd'))
+
     const handleChoosePlayer = (e: any) => {
-        const {target: {value}} = e
+        const {target: {value, selectedIndex, childNodes}} = e
+        const idElement = childNodes[selectedIndex].getAttribute('id')
+        setId(idElement)
         setChoosePlayer({name: value})
         setChooseAction({uploadInfo: true, newPlayer: false})
     }
@@ -48,9 +49,11 @@ const PanelAdmin = ({allPlayers}: any) => {
     const handleSubmit = async () => {
         const { adr, kdr, score, total } = stats
         const subtotal = (adr >= 100 && kdr >= 0.90) ? 0.5 : (adr >= 100 && kdr >= 1.1) ? 1 : 0
-        const uploadStat = await axios.post(`${URL}user/new-stat/${id}`, {totalScore: subtotal + score})
-        console.log(uploadStat)
+        const date = new Date(Date.now()).toLocaleDateString()
+        const uploadStat = await axios.put(`${URL}user/new-stat/${id}`, {totalScore: subtotal + parseInt(score.toString()), date})
+         if (uploadStat.data.success) setStats({adr: 0, kdr: 0, score: 0, total: 0})
     }
+
 
     return (
         <div className="panel-admin">
@@ -59,10 +62,10 @@ const PanelAdmin = ({allPlayers}: any) => {
                 <div className="player-profile">
                     <label>Jugador </label>
                     <select onChange={handleChoosePlayer}>
-                        <option>Seleccioná un jugador</option>
+                        <option unselectable='on'>Seleccioná un jugador</option>
                         {allPlayers.map((element: any, index: number) => {
                         
-                            return <option onClick={() => setId(element._id)} key={index}>{element.tag}</option>
+                            return <option id={element._id} key={index+1}>{element.tag}</option>
                         })}
                     </select>
 
@@ -110,9 +113,9 @@ const PanelAdmin = ({allPlayers}: any) => {
                         <div className="stats">
                             <span>{choosePlayer.name}</span>
                             <div className="form-container">
-                                <input autoComplete="off" type='text' name='adr' placeholder="ADR" onChange={(e)=>setStats({...stats, [e.target.name]: e.target.value})}/>
-                                <input autoComplete="off" type='text' name='kdr' placeholder="KDR" onChange={(e)=>setStats({...stats, [e.target.name]: e.target.value})}/>
-                                <input autoComplete="off" type='text' name='score' placeholder="Puntos" onChange={(e)=>setStats({...stats, [e.target.name]: e.target.value})}/>
+                                <input autoComplete="off" type='number' name='adr' value={stats.adr} placeholder="ADR" onChange={(e)=>setStats({...stats, [e.target.name]: e.target.value})}/>
+                                <input autoComplete="off" type='number' name='kdr' value={stats.kdr} placeholder="KDR" onChange={(e)=>setStats({...stats, [e.target.name]: e.target.value})}/>
+                                <input autoComplete="off" type='number' name='score' value={stats.score} placeholder="Puntos" onChange={(e)=>setStats({...stats, [e.target.name]: e.target.value})}/>
                                 <div className="scoreTotal-container">
                                     <span>{stats.total}</span> 
                                     {stats.total > 0 && <button className="edit-button">Editar</button>}
