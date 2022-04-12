@@ -12,7 +12,7 @@ const Score = ({allPlayers}: any) => {
 
       {allPlayers.map((player: any, index: number) => {
         return (
-          <div className="row">
+          <div key={index} className="row">
             <div className="ranking">
               <span>{index}</span>
             </div>
