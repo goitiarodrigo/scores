@@ -22,9 +22,9 @@ export const userController = {
     },
 
     newStat: async (req: Request, res: Response) => {
-        const {totalScore} = req.body.stats
+        const {totalScore} = req.body
         const { id } = req.params
-
+        console.log(id)
         const userUpdated = await User.findByIdAndUpdate({_id: id}, {$push: {totalScore}}, {new: true})
         res.json({success: true})
     },

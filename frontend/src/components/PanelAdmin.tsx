@@ -14,18 +14,29 @@ const PanelAdmin = ({allPlayers}: any) => {
         urlImage: '',
     })
 
-    const URL = 'http://localhost:4000/api/'
+    const URL = 'https://puntos-wilmar.herokuapp.com/api/'
 
     const [choosePlayer, setChoosePlayer] = useState({name: 'Elegí un jugador'})
     const [chooseAction, setChooseAction] = useState({newPlayer: false, uploadInfo: false})
     const [stats, setStats] = useState({adr: 0, kdr: 0, score: 0, total: 0})
+    const [id, setId] = useState<number | string>('')
    
 
     const handleNewPlayer = async () => {
         console.log(player)
+        const requestOption: any = {
+            body: JSON.stringify(player),
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                
+            },
+
+        }
         setChooseAction({uploadInfo: false, newPlayer: true})
         setChoosePlayer({name: 'Elegí un jugador'})
-        const newUser = await axios.post(`${URL}user/new-user`, player)
+        const response = await axios.put(`${URL}user/new-user`, player)
+        
     }
 
     const handleChoosePlayer = (e: any) => {
@@ -37,7 +48,7 @@ const PanelAdmin = ({allPlayers}: any) => {
     const handleSubmit = async () => {
         const { adr, kdr, score, total } = stats
         const subtotal = (adr >= 100 && kdr >= 0.90) ? 0.5 : (adr >= 100 && kdr >= 1.1) ? 1 : 0
-        const uploadStat = await axios.post(`${URL}user/new-stat/${'id'}`, {totalScore: subtotal + score})
+        const uploadStat = await axios.post(`${URL}user/new-stat/${id}`, {totalScore: subtotal + score})
         console.log(uploadStat)
     }
 
@@ -50,7 +61,8 @@ const PanelAdmin = ({allPlayers}: any) => {
                     <select onChange={handleChoosePlayer}>
                         <option>Seleccioná un jugador</option>
                         {allPlayers.map((element: any, index: number) => {
-                            return <option>{element.name}</option>
+                        
+                            return <option onClick={() => setId(element._id)} key={index}>{element.tag}</option>
                         })}
                     </select>
 

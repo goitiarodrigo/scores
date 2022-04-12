@@ -2,6 +2,9 @@ import "../App.css"
 
 
 const Score = ({allPlayers}: any) => {
+
+  console.log(allPlayers)
+  
   return (
     <div className="score-container">
       <div className="header">

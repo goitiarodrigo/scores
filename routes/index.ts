@@ -7,7 +7,7 @@ router.route('/user/new-user')
     .post(userController.newUser)
 
 router.route('/user/new-stat/:id')
-    .post(userController.newStat)
+    .put(userController.newStat)
     
 router.route('/user/get-users')
     .get(userController.getUsers)
