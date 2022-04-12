@@ -17,7 +17,7 @@ const PanelAdmin = ({allPlayers}: any) => {
         urlImage: '',
     })
 
-    const URL = 'http://localhost:4000/api/'
+    const URL = 'https://puntos-wilmar.herokuapp.com/api/'
 
     const [choosePlayer, setChoosePlayer] = useState({name: 'Elegí un jugador'})
     const [chooseAction, setChooseAction] = useState({newPlayer: false, uploadInfo: false})

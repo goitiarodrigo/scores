@@ -10,7 +10,7 @@ const App = () => {
   const [isOpen, setIsOpen] = useState(false)
   const [isLogged, setIsLogged] = useState(false)
   const [allPlayers, setAllPlayers] = useState<any>([])
-  const URL = 'http://localhost:4000/api/'
+  const URL = 'https://puntos-wilmar.herokuapp.com/api/'
   const getUsers = async () => {
       const users = await axios.get(`${URL}user/get-users`)
       setAllPlayers(users.data.response)
