@@ -1,5 +1,6 @@
 import { useState } from "react"
 import "../App.css"
+import CardPlayer from "./CardPlayer"
 import ModalUser from "./ModalUser"
 
 const Score = ({allPlayers}: any) => {
@@ -23,23 +24,7 @@ const Score = ({allPlayers}: any) => {
       </div>
 
       {allPlayers.length > 0 && allPlayers.map((player: any, index: number) => {
-        return (
-          <div  key={index} className="row">
-            <div className="ranking">
-              <span>{index}</span>
-            </div>
-            <div className="userProfile">
-              <div className='photoProfile' style={{backgroundImage: `url(${player.urlImage})`}}></div>
-              <div className="userTag">
-                <h3 onClick={() => handleClickOnUser(player._id)}>{player.tag}</h3>
-                <p>{player.name}</p>
-              </div>
-            </div>
-            <div className="score">
-              {/* <span>{player.totalScore}</span> */}
-            </div>
-          </div>
-        )
+        return <CardPlayer key={index} handleClickOnUser={handleClickOnUser} index={index + 1} player={player}/>
       })}
       {isOpenUser && <ModalUser setIsOpenUser={setIsOpenUser} allPlayers={allPlayers} id={id}  />}
     </div>

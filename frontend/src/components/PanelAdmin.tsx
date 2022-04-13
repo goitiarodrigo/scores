@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react"
 import axios from 'axios'
 import moment from 'moment'
+import CardPlayer from "./CardPlayer"
 moment.locale('es-mx')
 
 
@@ -10,9 +11,15 @@ interface IPLayer {
     urlImage: string,
 }
 
+interface IProps {
+    allPlayers: any[],
+    setAllPlayers: (value: boolean) => void,
+    isLogged: boolean
+}
+
 const URL = 'https://puntos-wilmar.herokuapp.com/api/'
 
-const PanelAdmin = ({allPlayers}: any) => {
+const PanelAdmin = ({allPlayers, setAllPlayers, isLogged}: IProps) => {
     const [player, setPlayer] = useState<IPLayer>({
         name: '',
         tag: '',
@@ -22,7 +29,17 @@ const PanelAdmin = ({allPlayers}: any) => {
     const [chooseAction, setChooseAction] = useState({newPlayer: false, uploadInfo: false})
     const [stats, setStats] = useState({adr: 0, kdr: 0, score: 0, total: 0})
     const [id, setId] = useState<number | string>('')
+    const [totalScore, setTotalScore] = useState(0)
    
+    const getUsers = async () => {
+        const users = await axios.get(`${URL}user/get-users`)
+        setAllPlayers(users.data.response)
+    }
+  
+    useEffect(() => {
+        getUsers()
+        setTotalScore(allPlayers.reduce((acc, curr)=> acc + curr.score, 0))
+    }, [player, stats])
 
     const handleNewPlayer = async () => {
         const response = await axios.post(`${URL}user/new-user`, player)
@@ -38,7 +55,7 @@ const PanelAdmin = ({allPlayers}: any) => {
         setChoosePlayer({name: 'Elegí un jugador'})
     }
 
-    console.log(moment(new Date(Date.now())).format('dddd'))
+   
 
     const handleChoosePlayer = (e: any) => {
         const {target: {value, selectedIndex, childNodes}} = e
@@ -51,7 +68,7 @@ const PanelAdmin = ({allPlayers}: any) => {
     const handleSubmit = async () => {
         const { adr, kdr, score, total } = stats
         const subtotal = (adr >= 100 && kdr >= 0.90) ? 0.5 : (adr >= 100 && kdr >= 1.1) ? 1 : 0
-        const date = new Date(Date.now()).toLocaleDateString()
+        const date = Date.now()
         const uploadStat = await axios.put(`${URL}user/new-stat/${id}`, {totalScore: subtotal + parseInt(score.toString()), date})
          if (uploadStat.data.success) setStats({adr: 0, kdr: 0, score: 0, total: 0})
     }
@@ -60,7 +77,7 @@ const PanelAdmin = ({allPlayers}: any) => {
     return (
         <div className="panel-admin">
             <div className="buttons">
-                <button onClick={handleSetNewPlayer}>Nuevo jugador</button>
+                <button onClick={handleSetNewPlayer}>Nuevo jugador ➕</button>
                 <div className="player-profile">
                     <label>Jugador </label>
                     <select onChange={handleChoosePlayer}>
@@ -70,31 +87,13 @@ const PanelAdmin = ({allPlayers}: any) => {
                             return <option id={element._id} key={index+1}>{element.tag}</option>
                         })}
                     </select>
-
-                    <p>{choosePlayer.name}</p>
                 </div>
             </div>
 
             <div className="players-container">
                 <div className="players">
                     {allPlayers.map((player: any, index: number) => {
-                        return (
-                            <div key={index} className="row-player">
-                                <div className="ranking">
-                                    <span>1</span>
-                                </div>
-                                <div className="userProfile">
-                                    <div className='photoProfile' style={{backgroundImage: `url(${player.urlImage})`}}></div>
-                                    <div>
-                                        <h3>{player.tag}</h3>
-                                        <p>{player.name}</p>
-                                    </div>
-                                </div>
-                                <div className="score">
-                                    {/* <span>57</span> */}
-                                </div>
-                            </div>
-                        )
+                        return <CardPlayer isLogged={isLogged} key={index} index={index + 1} player={player}/>
                     })}
                 </div>
 
@@ -115,13 +114,16 @@ const PanelAdmin = ({allPlayers}: any) => {
                         <div className="stats">
                             <span>{choosePlayer.name}</span>
                             <div className="form-container">
+                                <label>ADR</label>
                                 <input autoComplete="off" type='number' name='adr' value={stats.adr} placeholder="ADR" onChange={(e)=>setStats({...stats, [e.target.name]: e.target.value})}/>
+                                <label>KDR</label>
                                 <input autoComplete="off" type='number' name='kdr' value={stats.kdr} placeholder="KDR" onChange={(e)=>setStats({...stats, [e.target.name]: e.target.value})}/>
+                                <label>PUNTOS</label>
                                 <input autoComplete="off" type='number' name='score' value={stats.score} placeholder="Puntos" onChange={(e)=>setStats({...stats, [e.target.name]: e.target.value})}/>
-                                <div className="scoreTotal-container">
+                                {/* <div className="scoreTotal-container">
                                     <span>{stats.total}</span> 
                                     {stats.total > 0 && <button className="edit-button">Editar</button>}
-                                </div>
+                                </div> */}
                                 <button onClick={handleSubmit}>Subir nuevo stat</button>
                             </div>
                         </div>

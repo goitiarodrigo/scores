@@ -46,7 +46,7 @@ const App = () => {
         </div>
       </div>
       
-      {isLogged ? <PanelAdmin allPlayers={allPlayers} /> : <Score allPlayers={allPlayers} />}
+      {isLogged ? <PanelAdmin allPlayers={allPlayers} setAllPlayers={setAllPlayers} isLogged={isLogged} /> : <Score allPlayers={allPlayers} />}
       {isOpen && <ModalLogin isOpen={isOpen} setIsOpen={setIsOpen} setIsLogged={setIsLogged} />}
     </div>
   )

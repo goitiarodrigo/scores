@@ -16,7 +16,13 @@ const ModalUser = ({setIsOpenUser, id, allPlayers}: IProps) => {
             <h1>{user.tag}</h1>
             <div style={{backgroundImage: `url(${user.urlImage})`}} className='userPhoto'></div>
         </div>
-        {/* <span>{user.totalScore}</span> */}
+        {user.totalScore !== undefined &&
+        user.totalScore.map((score: any, index: number) => {
+          return (
+              <span key={index}>{score.score}</span>
+          )
+        })}
+        
     </div>
   )
 }
