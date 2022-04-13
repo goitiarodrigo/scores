@@ -10,15 +10,14 @@ interface IPLayer {
     urlImage: string,
 }
 
+const URL = 'https://puntos-wilmar.herokuapp.com/api/'
+
 const PanelAdmin = ({allPlayers}: any) => {
     const [player, setPlayer] = useState<IPLayer>({
         name: '',
         tag: '',
         urlImage: '',
     })
-
-    const URL = 'https://puntos-wilmar.herokuapp.com/api/'
-
     const [choosePlayer, setChoosePlayer] = useState({name: 'Elegí un jugador'})
     const [chooseAction, setChooseAction] = useState({newPlayer: false, uploadInfo: false})
     const [stats, setStats] = useState({adr: 0, kdr: 0, score: 0, total: 0})
@@ -26,14 +25,17 @@ const PanelAdmin = ({allPlayers}: any) => {
    
 
     const handleNewPlayer = async () => {
-        setChooseAction({uploadInfo: false, newPlayer: true})
-        setChoosePlayer({name: 'Elegí un jugador'})
-        const response = await axios.put(`${URL}user/new-user`, player)
+        const response = await axios.post(`${URL}user/new-user`, player)
             if (response.data.success) setPlayer({
                 name: '',
                 tag: '',
                 urlImage: '',
             })
+    }
+
+    const handleSetNewPlayer = () => {
+        setChooseAction({uploadInfo: false, newPlayer: true})
+        setChoosePlayer({name: 'Elegí un jugador'})
     }
 
     console.log(moment(new Date(Date.now())).format('dddd'))
@@ -58,7 +60,7 @@ const PanelAdmin = ({allPlayers}: any) => {
     return (
         <div className="panel-admin">
             <div className="buttons">
-                <button onClick={handleNewPlayer}>Nuevo jugador</button>
+                <button onClick={handleSetNewPlayer}>Nuevo jugador</button>
                 <div className="player-profile">
                     <label>Jugador </label>
                     <select onChange={handleChoosePlayer}>
@@ -89,7 +91,7 @@ const PanelAdmin = ({allPlayers}: any) => {
                                     </div>
                                 </div>
                                 <div className="score">
-                                    <span>57</span>
+                                    {/* <span>57</span> */}
                                 </div>
                             </div>
                         )

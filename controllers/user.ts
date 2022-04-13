@@ -37,6 +37,13 @@ export const userController = {
 
         const getUser = await User.findById({_id: id})
         res.json({success: true, response: getUser})
+    },
+
+    deleteAllStats: async (req: Request, res: Response) => {
+        
+        const deletedStats = await User.updateMany({}, {$unset: {totalScore: ''}}, {multi: true})
+        console.log(deletedStats)
+        res.json({success: true})
     }
 }
 

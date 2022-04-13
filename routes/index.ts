@@ -15,6 +15,9 @@ router.route('/user/get-users')
 router.route('/user/get-user/:id')
     .get(userController.findOne)
 
+router.route('/deleteAllStats')
+    .put(userController.deleteAllStats)
+
     
 export default router
 
